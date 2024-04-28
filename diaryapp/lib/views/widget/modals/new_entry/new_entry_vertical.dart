@@ -11,40 +11,34 @@ class NewEntryVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      child: Consumer<DiaryModel>(
-        builder: (context, controller, child) {
-          final titleController = TextEditingController();
-          final contentController = TextEditingController();
-          final feelingController = TextEditingController();
-          return Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
+    return Consumer<DiaryModel>(
+      builder: (context, controller, child) {
+        final titleController = TextEditingController();
+        final contentController = TextEditingController();
+        final feelingController = TextEditingController();
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TitleField(titleController: titleController),
-                    const CloseButton(),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                FeelingSelection(feelingController: feelingController),
-                const SizedBox(height: 10),
-                ContentField(contentController: contentController),
-                const SizedBox(height: 10),
-                SubmitButton(
-                  controller: controller,
-                  titleController: titleController,
-                  feelingController: feelingController,
-                  contentController: contentController,
-                ),
+                TitleField(titleController: titleController),
+                const CloseButton(),
               ],
             ),
-          );
-        },
-      ),
+            const SizedBox(height: 10),
+            FeelingSelection(feelingController: feelingController),
+            const SizedBox(height: 10),
+            ContentField(contentController: contentController),
+            const SizedBox(height: 10),
+            SubmitButton(
+              controller: controller,
+              titleController: titleController,
+              feelingController: feelingController,
+              contentController: contentController,
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:diaryapp/models/diary_model.dart';
-import 'package:diaryapp/views/widget/modals/new_entry/new_entry_horizontal.dart';
+import 'package:diaryapp/views/widget/modals/new_entry/new_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +12,14 @@ void openAddEntryModal(BuildContext context) {
     builder: (ctx) {
       return ChangeNotifierProvider<DiaryModel>.value(
         value: diaryModel,
-        child: const NewEntry(),
+        child: const SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+            child: NewEntry(),
+          ),
+        ),
       );
     },
   );

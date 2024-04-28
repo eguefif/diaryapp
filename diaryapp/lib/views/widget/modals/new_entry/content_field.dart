@@ -12,7 +12,6 @@ class ContentField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(width: 1),

@@ -2,7 +2,6 @@ import 'package:diaryapp/models/diary_model.dart';
 import 'package:diaryapp/utils/date.dart';
 import 'package:diaryapp/utils/svg.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 void showEntryModal(Entry entry, context) {
   showModalBottomSheet<void>(
