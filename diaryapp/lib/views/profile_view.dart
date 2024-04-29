@@ -1,5 +1,7 @@
-import 'package:diaryapp/views/widget/modals/show_add_entry_modal.dart';
-import 'package:diaryapp/views/widget/profile.dart';
+import 'package:diaryapp/views/calendar_view.dart';
+import 'package:diaryapp/views/profile_body_view.dart';
+import 'package:diaryapp/views/widget/appbar.dart';
+import 'package:diaryapp/views/widget/buttons/add_entry_button.dart';
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatelessWidget {
@@ -9,57 +11,26 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:
-            Text("Diary app", style: Theme.of(context).textTheme.displayMedium),
-        actions: [
-          IconButton(
-            padding: const EdgeInsets.all(10),
-            style: _getButtonStyle(),
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await logout();
-            },
-          ),
-        ],
-      ),
-      body: const SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Divider(
-                height: 25,
-                thickness: 5,
-                color: Colors.black,
-                indent: 25,
-                endIndent: 25),
-            Expanded(child: Profile()),
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+        appBar: DiaryAppBar(logout: logout),
+        body: const TabBarView(
+          children: <Widget>[
+            ProfileBodyView(),
+            CalendarView(),
           ],
         ),
-      ),
-      floatingActionButton: IconButton(
-        padding: const EdgeInsets.all(10),
-        iconSize: 55,
-        style: _getButtonStyle(),
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          openAddEntryModal(context);
-        },
-      ),
-    );
-  }
-
-  ButtonStyle _getButtonStyle() {
-    return IconButton.styleFrom(
-      elevation: 10,
-      backgroundColor: const Color.fromARGB(255, 13, 178, 18),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-        side: const BorderSide(
-          color: Color.fromARGB(255, 25, 43, 26),
-          width: 4,
-        ),
+        floatingActionButton: const AddEntryButton(),
+        bottomNavigationBar: const TabBar(tabs: <Widget>[
+          Tab(
+            icon: Icon(Icons.person_outlined),
+          ),
+          Tab(
+            icon: Icon(Icons.calendar_today_outlined),
+          ),
+        ]),
       ),
     );
   }

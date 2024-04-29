@@ -23,6 +23,7 @@ class DiaryModel extends ChangeNotifier {
   Credentials? _credentials;
   CollectionReference? entriesFirebase;
   String? email;
+  String? name = "DiaryApp";
 
   Future<void> connectToFireBase(credentials) async {
     _credentials = credentials;
@@ -45,7 +46,8 @@ class DiaryModel extends ChangeNotifier {
     }
     _entries.clear();
     String token = await _authApi(_credentials);
-    email = _credentials?.user.email;
+    email = _credentials!.user.email;
+    name = _credentials!.user.name ?? "Diaryapp";
     try {
       await FirebaseAuth.instance.signInWithCustomToken(token);
       entriesFirebase = FirebaseFirestore.instance.collection('diary_entries');
@@ -100,6 +102,20 @@ class DiaryModel extends ChangeNotifier {
     return _entries[index];
   }
 
+  String getFeelingStat(String feeling){
+    final int total = _entries.length;
+    if (total == 0){
+      return "0%";
+    }
+    int count = 0;
+    for (final entry in _entries){
+        if (entry.feeling == feeling){
+            count++;
+        }
+    }
+    return "${(count / total * 100).toInt()}%";
+  }
+
   List<Entry> get entries => _entries;
 }
 
@@ -119,9 +135,9 @@ class Entry {
 }
 
 Future<String> _authApi(credentials) async {
-  //const url = "http://192.168.0.45:8000";
+  const url = "http://192.168.0.45:8000";
   //const url = "http://c1r7p10.42quebec.com/";
-  const url = "http://10.0.2.2:8000/";
+  //const url = "http://10.0.2.2:8000/";
   if (credentials != null) {
     var retval = await http.get(Uri.parse(url), headers: {
       "authorization": "Bearer ${credentials!.idToken}",
