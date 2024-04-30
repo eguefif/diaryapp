@@ -121,18 +121,14 @@ class DiaryModel extends ChangeNotifier {
 
   List<Entry> getEntries(DateTime? date) {
     if (date == null) {
-      print("COUNT NULL)");
       return _entries;
     }
     List<Entry> retval = [];
     for (var entry in _entries) {
-      print(
-          "COUNT ${date.toString()} and ${DateTime.fromMillisecondsSinceEpoch(entry.date).toString()}");
       if (_isSameDay(date, DateTime.fromMillisecondsSinceEpoch(entry.date))) {
         retval.add(entry);
       }
     }
-    print("COUNT $retval");
     return retval;
   }
 
