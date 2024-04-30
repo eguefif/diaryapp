@@ -5,21 +5,23 @@ import 'package:flutter/material.dart';
 class OneRowEntry extends StatelessWidget {
   const OneRowEntry({
     super.key,
-    required this.controller,
+    required this.entries,
+    required this.deleteEntry,
     required this.index,
   });
-  final DiaryModel controller;
+  final List<Entry> entries;
   final int index;
+  final void Function(Entry) deleteEntry;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       background: Container(color: Colors.red),
-      key: ValueKey<Entry>(controller.entries[index]),
+      key: ValueKey<Entry>(entries[index]),
       onDismissed: (DismissDirection direction) {
-        controller.deleteEntry(index);
+        deleteEntry(entries[index]);
       },
-      child: RowButtonEntry(controller: controller, index: index),
+      child: RowButtonEntry(entry: entries[index]),
     );
   }
 }

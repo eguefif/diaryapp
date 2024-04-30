@@ -13,15 +13,25 @@ class Entries extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DiaryModel>(
       builder: (context, controller, child) {
-        int itemCount = controller.entries.length;
-        if (forProfile){
+        List<Entry> entries = controller.getEntries(date);
+        int itemCount = entries.length;
+        if (forProfile) {
           itemCount = itemCount < 2 ? itemCount : 2;
+        } 
+        if (itemCount == 0 && !forProfile) {
+          return const Center(
+              child: Text("You don't have entries for this day"));
+        }
+        else if (itemCount == 0 && forProfile) {
+          return const Center(
+              child: Text("You don't yet, write your first diary entry!"));
         }
         return ListView.builder(
           itemCount: itemCount,
           itemBuilder: (ctx, index) {
             return OneRowEntry(
-              controller: controller,
+              entries: entries,
+              deleteEntry: controller.deleteEntry,
               index: index,
             );
           },

@@ -11,7 +11,7 @@ enum Feeling {
   anger("assets/angry.svg", "anger"),
   neutral("assets/neutral.svg", "neutral"),
   sad("assets/sad.svg", "sad");
-  
+
   const Feeling(this.asset, this.description);
   final String asset;
   final String description;
@@ -54,22 +54,23 @@ class DiaryModel extends ChangeNotifier {
       QuerySnapshot snapshot = await entriesFirebase!.get();
       List<QueryDocumentSnapshot> list = snapshot.docs;
       for (var entry in list) {
-        _entries.add(
-          Entry(
-            content: entry.get("content"),
-            title: entry.get("title"),
-            date: entry.get("date"),
-            feeling: entry.get("feeling"),
-            id: entry.id,
-          ),
-        );
+        if (entry.get("email") == email) {
+          _entries.add(
+            Entry(
+              content: entry.get("content"),
+              title: entry.get("title"),
+              date: entry.get("date"),
+              feeling: entry.get("feeling"),
+              id: entry.id,
+            ),
+          );
+        }
       }
-    _entries.sort((a, b) => b.date - a.date);
-    debugPrint(_entries.toString());
-      notifyListeners();
+      _entries.sort((a, b) => b.date - a.date);
     } catch (e) {
       debugPrint("FIREBASE ERROR $e");
     }
+    notifyListeners();
   }
 
   void addEntry(Entry entry) async {
@@ -92,31 +93,52 @@ class DiaryModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteEntry(int index) async {
-    await entriesFirebase!.doc(_entries[index].id).delete();
-    _entries.removeAt(index);
+  void deleteEntry(Entry entry) async {
+    await entriesFirebase!.doc(entry.id).delete();
+    _entries.remove(entry);
     notifyListeners();
   }
 
-  Entry getEntry(int index){
+  Entry getEntry(int index) {
     return _entries[index];
   }
 
-  String getFeelingStat(String feeling){
+  String getFeelingStat(String feeling) {
     final int total = _entries.length;
-    if (total == 0){
+    if (total == 0) {
       return "0%";
     }
     int count = 0;
-    for (final entry in _entries){
-        if (entry.feeling == feeling){
-            count++;
-        }
+    for (final entry in _entries) {
+      if (entry.feeling == feeling) {
+        count++;
+      }
     }
     return "${(count / total * 100).toInt()}%";
   }
 
   List<Entry> get entries => _entries;
+
+  List<Entry> getEntries(DateTime? date) {
+    if (date == null) {
+      print("COUNT NULL)");
+      return _entries;
+    }
+    List<Entry> retval = [];
+    for (var entry in _entries) {
+      print(
+          "COUNT ${date.toString()} and ${DateTime.fromMillisecondsSinceEpoch(entry.date).toString()}");
+      if (_isSameDay(date, DateTime.fromMillisecondsSinceEpoch(entry.date))) {
+        retval.add(entry);
+      }
+    }
+    print("COUNT $retval");
+    return retval;
+  }
+
+  bool _isSameDay(DateTime d1, DateTime d2) {
+    return (d1.year == d2.year && d1.month == d2.month && d1.day == d2.day);
+  }
 }
 
 class Entry {

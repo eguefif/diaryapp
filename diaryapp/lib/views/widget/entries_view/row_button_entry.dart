@@ -6,23 +6,21 @@ import 'package:flutter/material.dart';
 class RowButtonEntry extends StatelessWidget {
   const RowButtonEntry({
     super.key,
-    required this.controller,
-    required this.index,
+    required this.entry,
   });
-  final DiaryModel controller;
-  final int index;
+  final Entry entry;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        showEntryModal(controller.getEntry(index), context);
+        showEntryModal(entry, context);
       },
       style: _styleRowButtonEntry(),
       child: EntryRow(
-          date: controller.entries[index].date,
-          title: controller.entries[index].title,
-          feeling: controller.entries[index].feeling),
+          date: entry.date,
+          title: entry.title,
+          feeling: entry.feeling),
     );
   }
 

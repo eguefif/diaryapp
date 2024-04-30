@@ -29,7 +29,7 @@ class SubmitButton extends StatelessWidget {
         Entry entry = Entry(
           title: titleController.text,
           content: contentController.text,
-          date: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+          date: DateTime.now().millisecondsSinceEpoch,
           feeling: feelingController.text,
         );
         if (_checkEntry(entry)) {
